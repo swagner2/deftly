@@ -1,36 +1,28 @@
-<script>
-		// JavaScript code for handling the form submission
-		const form = document.getElementById('signup-form');
+$(document).ready(function() {
+  $('#signup-form').submit(function(event) {
+    event.preventDefault(); // prevent form from submitting normally
+    var email = $('input[name="email"]').val(); // get email value from input field
+    var sendFoxApiUrl = 'https://api.sendfox.com/v1/contacts'; // SendFox API endpoint URL
 
-		form.addEventListener('submit', async (event) => {
-			event.preventDefault();
-
-			const email = form.email.value;
-			if (!email) {
-				alert('Please enter your email address');
-				return;
-			}
-
-			// Call the SendFox API to add the email address to your SendFox list
-			const apiKey = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVlZGQ3NGQxMDE1NzMyMGFhZDE0YWQ0YmE2ZmY4YWQxZWY5NmQ0NTY1NWFkOTBiZmM3MGI0MWVjZGMwMDc3NjI1YmU3ZGRlYzExMmExNDJlIn0.eyJhdWQiOiI0IiwianRpIjoiNWVkZDc0ZDEwMTU3MzIwYWFkMTRhZDRiYTZmZjhhZDFlZjk2ZDQ1NjU1YWQ5MGJmYzcwYjQxZWNkYzAwNzc2MjViZTdkZGVjMTEyYTE0MmUiLCJpYXQiOjE2ODAyOTkyNjMsIm5iZiI6MTY4MDI5OTI2MywiZXhwIjoxNzExOTIxNjYzLCJzdWIiOiIxMDUzODUiLCJzY29wZXMiOltdfQ.dJJprEA2SRJaEowhe-xglaeTyAQ_d9vsp3hBjFDwi-CJ3a2pZIC4crNto4Z5TIwbQdCDz88w4trpTCeg7GaXEvGbmi6uDzpoEoqdI6cZh1h6CNrHF16Qmx87yEYERpN4CNp-lBmFsBOJv5XSGA6hrlKh4g2Rs5hZlBnMfxuBV27zbHU0MZmownEAOBYmmf2Bq6XY7Sb1HEJLWdno8obbht0c2gfwo5Gnk_Vg_QwA2HwNns-eu12HoMerB5QsBZ0zPXvM3OyUx8f8H_vxbORiCbc7xouQ0l7DH_TawsEBFIYV1yOeQtX3_0rLxOz_IyqUv5zhCDTz9m2ajKBrU4cREu8NbUHkuQYcCJjos0aDk7BWkTeDQR_Pysnyp-_5HhzNh27f7kXmsJu7stx75m0s9M1ZcUqEAmRdGM1VF6ftPnaH0LuR8gjepWhJCw8l-WXt1JGynSkGHUqhawkpWdPsjLad1XKI7MeBnmV6jjluN1MIrL0ITsgB8uNleLzz9wiD8o8SUFSgEMUG1WgTzIjz66uq9H3x75QBJaanNP2pNtCDiFZqYiBUS006DZ6s9wl3pk59Px-VmqbnFc2dX_wETC9IfI5eHPTi9WNbOodWNIr-PHEJebwRS5neEOph4Z9yTOMbIzE2-PfllZgGAWZd3Rt5vCpQAort-CSmn7VPy-c';
-			const listId = '411571';
-			const url = `https://api.sendfox.com/contacts/${listId}`;
-			const response = await fetch(url, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${apiKey}`
-				},
-				body: JSON.stringify({
-					email: email
-				})
-			});
-
-			if (response.ok) {
-				alert('Thank you for signing up!');
-				form.reset();
-			} else {
-				alert('Oops, something went wrong. Please try again later.');
-			}
-		});
-	</script>
+    // make AJAX request to SendFox API
+    $.ajax({
+      type: 'POST',
+      url: sendFoxApiUrl,
+      headers: {
+        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImFlMjdlNjdiMjMyNWUzMjU2YzQwYTcwYmIwMDFhOWY3ODJlZmMxNDkzNTVhN2I3MzMwNDAwODIxMmI3OGUxNzI1OWI5M2RiNDk1ZTdjNzY4In0.eyJhdWQiOiI0IiwianRpIjoiYWUyN2U2N2IyMzI1ZTMyNTZjNDBhNzBiYjAwMWE5Zjc4MmVmYzE0OTM1NWE3YjczMzA0MDA4MjEyYjc4ZTE3MjU5YjkzZGI0OTVlN2M3NjgiLCJpYXQiOjE2ODAzMDAzOTIsIm5iZiI6MTY4MDMwMDM5MiwiZXhwIjoxNzExOTIyNzkyLCJzdWIiOiIxMDUzODUiLCJzY29wZXMiOltdfQ.euz4t_cG2HRrudbIA2sVjvaXWlE7XEd_KF8Mexmm1Z2ldbM7ZVV9Ekr5XHr1TZ0bKhIHqshZ3BQXU-YFBEWrOqICQdEx0f6Ai4LXWbSSRpgY7M7hnVUFKyCAwmoxhEE-fA826QpqMKst705VsxVR6Vg_94nxLYKjnVbNEE02HatMNr7GxtgX9r7V88WuiZKPTwnisOTy8gH0BGWdWwsLOEFDzpj02YAFTZ400vx-hJGUrprgYMHk84rg2WEqmr7Eews5_IiayytCBNFluguk8z3pD3WPjL4myFMy1YzPWWw9VRREGyCtwZeHDk9qapSm3EmYfDP4HTTtC2_AcPtEu_ytbAeeSyLUVtH5U-ngtQhjKKcd4QdJrBZ9H31-QonzPtmmhOnP2cEtWpdR9eEgwv8VNZFfcvAeAm7F9_HMeWW3tNgM_JpYoa1mKfkAHXeN_GK2Q83dFTjM4Xhc8E7dIAzLZkpDdWoVVrlWXBoF_rDz-nrSrg22BLqc1O1nQf5FZdLluyzuxasp_DJO80XylG4KHZY6jDM1qZxqmpwRXDwRKEZU6p9r6wz3oNYIJ2V7B3LVShYN0blRl2FbKEuInuxs5H2Rq0ibKCrQpSm0m_SmXuJeQ2b3HvsgiXC4Kti7uxunhma7ULvF3oBOg9YhXeWQGDxRy9pgkU-_qNfOmdo'
+      },
+      data: {
+        'email': email,
+        'tags': 'newsletter'
+      },
+      success: function(response) {
+        $('#message').html('<p class="success">Thank you for subscribing!</p>');
+        $('input[name="email"]').val('');
+      },
+      error: function(xhr, status, error) {
+        $('#message').html('<p class="error">Oops! Something went wrong.</p>');
+        console.log(xhr.responseText);
+      }
+    });
+  });
+});
