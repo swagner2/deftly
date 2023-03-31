@@ -43,16 +43,60 @@
 		input[type="submit"]:hover {
 			background-color: #45a049;
 		}
+		#error-message {
+			color: red;
+			font-size: 14px;
+			margin-top: 10px;
+		}
 	</style>
 </head>
 <body>
 	<div class="container">
 		<h1>Sign up for the Deftly AI Newsletter</h1>
 		<p>Enter your email address to receive our latest news and updates.</p>
-		<form action="#" method="POST">
-			<input type="email" name="email" placeholder="Enter your email address" required>
-			<input type="submit" value="Sign up">
+		<form id="signup-form" action="#" method="POST">
+			<input type="email" name="email" id="email-input" placeholder="Enter your email address" required>
+			<input type="submit" id="submit-button" value="Sign up">
+			<div id="error-message"></div>
 		</form>
 	</div>
-</body>
-</html>
+
+	<script>
+		// Get form elements
+		const form = document.getElementById("signup-form");
+		const emailInput = document.getElementById("email-input");
+		const submitButton = document.getElementById("submit-button");
+		const errorMessage = document.getElementById("error-message");
+
+		// Handle form submission
+		form.addEventListener("submit", async (e) => {
+			e.preventDefault();
+
+			// Disable submit button
+			submitButton.disabled = true;
+			submitButton.value = "Submitting...";
+
+			// Send email to Deftly AI newsletter service
+			const response = await fetch("https://api.deftlyai.com/newsletter/signup", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ email: emailInput.value }),
+			});
+
+			// Handle response
+			if (response.ok) {
+				// Show success message
+				errorMessage.innerText = "Thank you for signing up!";
+				errorMessage.style.color = "green";
+				emailInput.value = "";
+			} else {
+				// Show error message
+				const data = await response.json();
+				errorMessage.innerText = data.message || "An error occurred. Please try again later.";
+			}
+
+			// Enable submit button
+			submitButton.disabled = false;
+			submitButton.value = "Sign up
