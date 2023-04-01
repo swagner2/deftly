@@ -1,61 +1,103 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Deftly Ai Newsletter </title>
+    <title>Signup Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-      * {
-        box-sizing: border-box;
-        font-family: sans-serif;
-      }
       body {
-        background-color: #f5f5f5;
+        background-color: #f2f2f2;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
       }
-      h1 {
-        text-align: center;
-        margin-top: 400px;
-      }
-      }    
-      .form-container {
+      .container {
         max-width: 600px;
         margin: 0 auto;
+        padding: 30px;
         background-color: #fff;
-        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         border-radius: 5px;
-        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin: 0;
+        font-weight: bold;
+        color: #333;
+      }
+      p {
+        margin: 0 0 20px;
+        color: #555;
       }
       input[type="email"] {
         display: block;
         width: 100%;
         padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 3px;
-        border: none;
+        margin-bottom: 20px;
         font-size: 16px;
-        outline: none;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
       }
-      input[type="submit"] {
+      button[type="submit"] {
         display: block;
-        width: 100%;
-        padding: 10px;
-        background-color: #4CAF50;
-        color: #fff;
-        border: none;
-        border-radius: 3px;
+        margin: 0 auto;
+        padding: 10px 20px;
         font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        color: #fff;
+        background-color: #4CAF50;
+        border: none;
+        border-radius: 5px;
         cursor: pointer;
       }
-      .error {
-        color: #f44336;
+      button[type="submit"]:hover {
+        background-color: #3e8e41;
       }
-      .success {
+      .status-message {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .status-success {
         color: #4CAF50;
+      }
+      .status-error {
+        color: #f44336;
       }
     </style>
   </head>
   <body>
-    <style>
-div.a {
-	text-align: center;
-			
+    <div class="container">
+      <h1>Signup for Our Newsletter</h1>
+      <p>Stay up-to-date with the latest news and offers.</p>
+      <div id="signup-form">
+        <!-- Add your Sendfox embeddable form code here -->
+      </div>
+      <div id="status-message"></div>
+    </div>
+    <script>
+      var form = document.querySelector('#signup-form form');
+      var statusMessage = document.querySelector('#status-message');
+      
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(form);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://api.sendfox.com/v1/contacts');
+        xhr.setRequestHeader('Authorization', 'Bearer YOUR_SENDFOX_API_KEY_HERE');
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              statusMessage.className = 'status-message status-success';
+              statusMessage.innerHTML = 'Thank you for signing up!';
+            } else {
+              statusMessage.className = 'status-message status-error';
+              statusMessage.innerHTML = 'Oops! Something went wrong.';
+            }
+          }
+        };
+        xhr.send(formData);
+      });
+    </script>
   </body>
 </html>
